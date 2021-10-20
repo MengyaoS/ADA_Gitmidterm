@@ -39,3 +39,10 @@ ggplot(data = BRFSS_clean, aes(x = SEX, y = ht_meters)) +
 
 ```
 
+```{r}
+# get height mean by sex
+aggregate(BRFSS$ht_meters,
+          list(BRFSS$SEX),
+          mean, na.rm = TRUE)
+```
+
