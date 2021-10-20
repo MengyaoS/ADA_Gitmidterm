@@ -1,0 +1,41 @@
+---
+title: "midterm"
+author: "Mengyao Shi"
+date: "10/19/2021"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(readr)
+library(odds.n.ends)
+library(tidyverse)
+
+BRFSS <- read_csv("https://raw.githubusercontent.com/kijohnson/ADA-Fall-2021/master/BRFSS2017_10percent_v.csv")
+```
+
+```{r}
+library(haven)
+#recode sex
+BRFSS$SEX<-factor(BRFSS$SEX, 
+                  levels = c(1, 2), 
+                  labels = c("Male", "Female"))
+table(BRFSS$SEX)
+
+# get median by sex
+aggregate(BRFSS$ht_meters,
+          list(BRFSS$SEX),
+          median, na.rm = TRUE)
+
+# exclude NA first
+BRFSS_clean <- na.omit(BRFSS)
+
+# Make a violin plot about height by sex, adding median
+ggplot(data = BRFSS_clean, aes(x = SEX, y = ht_meters)) +
+  geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + #add quartiles
+  labs(x = "Sex", y = "Height (meters)",  title = "Violin plot")+
+  stat_summary(fun.y=median, geom="point", shape=2, color="blue") #add median
+
+```
+
